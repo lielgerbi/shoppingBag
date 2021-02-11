@@ -3,42 +3,6 @@ import React ,  {useState, useEffect} from "react"
 import { DataGrid } from '@material-ui/data-grid';
 
 function App() {
-  // const columns = [
-  //   {
-  //     id:1,
-  //     title: 'Name',
-  //     dataIndex: 'name',
-  //     key: 'name',
-  //     width: 100,
-  //   },
-  //   {
-  //     id:2,
-  //     title: 'Category',
-  //     dataIndex: 'category',
-  //     key: 'category',
-  //     width: 100,
-  //   },
-  //   {
-  //     id:3,
-  //     title: 'Price',
-  //     dataIndex: 'price',
-  //     key: 'price',
-  //     width: 200,
-  //   },
-  //   {
-  //     id:4,
-  //     title: 'Quantity',
-  //     dataIndex: 'quantity',
-  //     key: 'quantity',
-  //     width: 200,
-  //   },
-    // {
-    //   title: 'Operations',
-    //   dataIndex: '',
-    //   key: 'operations',
-    //   render: () => <a href="#">Delete</a>,
-    // },
-  //];
   const columns = [
     { field: 'id', headerName: 'ID', width: 70 },
     { field: 'name', sortable: false, headerName: 'name', width: 130 },
