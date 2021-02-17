@@ -1,6 +1,6 @@
 .data{
-  background: coral;
-  height:100vh;
+  background: rgb(248, 145, 107);
+  height:150vh;
   width: 80%;
   position: absolute;
   z-index: 15;
@@ -10,9 +10,10 @@
 }
 
 .frame{
-  background: blueviolet;
-  height:100vh;
+  background: rgb(52, 15, 87);
+  height:150vh;
 }
+
 
 .title{
   text-align: center;
@@ -23,10 +24,30 @@
 #divInCenter {
   position: absolute;
   width: 60%;
-  height: 300px;
+  height: 260px;
   z-index: 15;
-  top: 30%;
+  top: 20%;
   left: 40%;
   margin: -100px 0 0 -150px;
   background: lightcyan;
+}
+
+#divInleft{
+  position: relative;
+  width: 30%;
+  height: 260px;
+  z-index: 15;
+  top: 50%;
+  left: 17%;
+  margin: -100px 0 0 -75px;
+}
+
+#divInright{
+  position: relative;
+  width: 30%;
+  height: 260px;
+  z-index: 15;
+  top: 32%;
+  left: 80%;
+  margin: -100px 0 0 -150px;
 }
