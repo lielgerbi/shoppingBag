@@ -1,20 +1,20 @@
 import React ,  {useState, useEffect} from "react"
-import { DataGrid } from '@material-ui/data-grid';
+// import { DataGrid } from '@material-ui/data-grid';
 import { useForm } from "react-hook-form";
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
-  const columns = [
-    { field: 'id', headerName: 'ID', width: 70 },
-    { field: 'name', sortable: false, headerName: 'name', width: 130 },
-    { field: 'price', headerName: 'price',type: 'number', width: 130 },
-    {
-      field: 'quantity',
-      headerName: 'quantity',
-      type: 'number',
-      width: 160
-    }
-  ];
+  // const columns = [
+  //   { field: 'id', headerName: 'ID', width: 70 },
+  //   { field: 'name', sortable: false, headerName: 'name', width: 130 },
+  //   { field: 'price', headerName: 'price',type: 'number', width: 130 },
+  //   {
+  //     field: 'quantity',
+  //     headerName: 'quantity',
+  //     type: 'number',
+  //     width: 160
+  //   }
+  // ];
   const { register ,handleSubmit} = useForm();
   const categories = ["meat",
                       "milk",
@@ -49,7 +49,7 @@ function App() {
     addProdoct({id: (productsInBag+1).toString() ,name:data.name1 , category : data.category1, price : data.price1 , quantity: data.quantity1})
    }
   };
-  
+   
    const [error] = useState(null);
    const [selectCategory , setCategory] = useState(null);
    const [forms , setForm]= useState(true);
@@ -79,6 +79,11 @@ function App() {
     console.log(rows);
   }
 
+  function sortBy(colName){
+    setRows(rows.sort((a, b) => parseFloat(a.price) - parseFloat(b.price)));
+    console.log(rows)
+    debugger;
+  }
   if (error) {
     return <div>Error: {error.message}</div>;
   } 
@@ -88,11 +93,39 @@ function App() {
       <div className={`frame`}>
       <div className={`data`}>
         <div>
-          <h1 className= {`title`}>רשימת הקניות שלי ({productsInBag})</h1>
+          <h1 className= {`title`}>רשימת הקניות שלי ({productsInBag}) ⚛️</h1>
           <div id="divInCenter">
-            <DataGrid rows={rows} columns={columns} pageSize={5} checkboxSelection />
+            {/* <DataGrid rows={rows} columns={columns} pageSize={5} checkboxSelection /> */}
+            <table class="table table-sm">
+          <tbody>
+            <tr>
+              <th scope="col">
+                <button type="button"  class="btn btn-outline-secondary">name ⇅</button></th>
+              <th scope="col">
+              <button type="button" class="btn btn-outline-secondary">category ⇅ </button></th>
+              <th scope="col">
+              <button type="button" onClick={() => sortBy("price")} class="btn btn-outline-secondary">price ⇅ </button></th>
+              <th scope="col">
+                <button type="button"  class="btn btn-outline-secondary">quantity ⇅</button></th>
+              <th scope="col">
+                <button type="button"  class="btn btn-outline-secondary">total price ⇅</button></th>
+            </tr>
+            {rows.map(item => {
+              return (
+                <tr>
+                  <td>{item.name}</td>
+                  <td>{item.category}</td>
+                  <td>{item.price}</td>
+                  <td>{item.quantity}</td>
+                  <td>{item.quantity * item.price}</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
           </div>
         </div>
+        
          
       <div id="divInleft">
       <form onSubmit={handleSubmit(onSubmitForm)}>
