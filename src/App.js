@@ -39,8 +39,7 @@ function App() {
                     {name: "סטייק" , category: categories[0]}]
 
   const onSubmitForm = data => {
-    console.log(forms);
-    debugger;
+    // console.log(forms);
     if(forms===true){
       addProdoct({id: (productsInBag+1).toString() ,name: data.name ,category : data.category, price : data.price , quantity: data.quantity})
     }
@@ -65,8 +64,6 @@ function App() {
 
   function getItemsByCat(category){
     var filterItems = products.filter(product => product.category === category);
-    console.log(filterItems)
-    debugger;
     return filterItems;
   }
   function addProdoct (newItem) {
@@ -90,27 +87,38 @@ function App() {
 
   function sortArr(select){
     var sortRows;
-    debugger;
     if(select!= null){
       var orederDir = order[(order.findIndex(element => element.name = select))].direction;
+      sortRows = rows;
+      //desc
       if (orederDir=== 1)
       {
+        if(select === "total"){
+          sortRows =rows.sort((a,b) => (a.price *a.quantity> b.price *b.quantity) ? 1 : ((b.price *b.quantity > a.price *a.quantity) ? -1 : 0))
+        }
+        else{
             sortRows =rows.sort((a,b) => (a[select]> b[select]) ? 1 : ((b[select] > a[select]) ? -1 : 0))
-            debugger;
+        }
+        return sortRows;
       }
+      //asc
       else{
         sortRows =rows.sort((a,b) => (a[select]< b[select]) ? 1 : ((b[select] < a[select]) ? -1 : 0))
-        debugger;
+        return sortRows;
       }
-      
     }
-    else
-    {
-      sortRows = rows
-      debugger;
+    else{
+      sortRows = rows;
+      // for(const element of sortRows) {
+      //   element.totalPrice = element.price *element.quantity;
+      // }
     }
-    console.log(sortRows)
     debugger;
+    for(const element of sortRows) {
+      console.log(element.name);
+      debugger;
+      element.totalPrice = element.price *element.quantity;
+    }
     return sortRows;
   }
 
@@ -139,7 +147,7 @@ function App() {
               <th scope="col">
                 <button type="button"  class="btn btn-outline-secondary">quantity ⇅</button></th>
               <th scope="col">
-                <button type="button"  class="btn btn-outline-secondary">total price ⇅</button></th>
+                <button type="button" onClick={() => changeSort("total")} class="btn btn-outline-secondary">total price ⇅</button></th>
             </tr>
             {sortArr(selectCategory).map(item => {
               return (
@@ -148,7 +156,7 @@ function App() {
                   <td>{item.category}</td>
                   <td>{item.price}</td>
                   <td>{item.quantity}</td>
-                  <td>{item.quantity * item.price}</td>
+                  <td>{item.quantity *item.price}</td>
                 </tr>
               );
             })}
