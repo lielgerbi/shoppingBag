@@ -38,7 +38,6 @@ function App() {
                     {name: "צלי" , category: categories[0]},
                     {name: "סטייק" , category: categories[0]}]
 
-  
   const onSubmitForm = data => {
     console.log(forms);
     debugger;
@@ -51,6 +50,7 @@ function App() {
   };
    
    const [error] = useState(null);
+   const [order] = useState([{name:"catgory" , direction: -1} ,{name:"price" , direction: -1} ,{name:"total" , direction: -1}]);
    const [selectCategory , setCategory] = useState(null);
    const [forms , setForm]= useState(true);
    const [rows , setRows]  = useState([{ id :'1',name : 'milk' ,category : 'milk products', price :'5' , quantity: '2'},
@@ -60,7 +60,7 @@ function App() {
   
     
     useEffect(() => {
-        
+
     }, [])
 
   function getItemsByCat(category){
@@ -79,11 +79,41 @@ function App() {
     console.log(rows);
   }
 
-  function sortBy(colName){
-    setRows(rows.sort((a, b) => parseFloat(a.price) - parseFloat(b.price)));
-    console.log(rows)
+  function getsum () {
+    return rows.reduce((a, b) => a + ((b.price  || 0)*(b.quantity  || 0)), 0);
+  }
+  function changeSort (sortValue) {
+    setCategory(sortValue);
+    order[(order.findIndex(element => element.name = sortValue))].direction *=-1;
     debugger;
   }
+
+  function sortArr(select){
+    var sortRows;
+    debugger;
+    if(select!= null){
+      var orederDir = order[(order.findIndex(element => element.name = select))].direction;
+      if (orederDir=== 1)
+      {
+            sortRows =rows.sort((a,b) => (a[select]> b[select]) ? 1 : ((b[select] > a[select]) ? -1 : 0))
+            debugger;
+      }
+      else{
+        sortRows =rows.sort((a,b) => (a[select]< b[select]) ? 1 : ((b[select] < a[select]) ? -1 : 0))
+        debugger;
+      }
+      
+    }
+    else
+    {
+      sortRows = rows
+      debugger;
+    }
+    console.log(sortRows)
+    debugger;
+    return sortRows;
+  }
+
   if (error) {
     return <div>Error: {error.message}</div>;
   } 
@@ -96,21 +126,22 @@ function App() {
           <h1 className= {`title`}>רשימת הקניות שלי ({productsInBag}) ⚛️</h1>
           <div id="divInCenter">
             {/* <DataGrid rows={rows} columns={columns} pageSize={5} checkboxSelection /> */}
-            <table class="table table-sm">
+            <div  id="table-wrapper">
+            <table  id="process-manager-table" class="table table-sm">
           <tbody>
             <tr>
               <th scope="col">
                 <button type="button"  class="btn btn-outline-secondary">name ⇅</button></th>
               <th scope="col">
-              <button type="button" class="btn btn-outline-secondary">category ⇅ </button></th>
+              <button type="button" onClick={() => changeSort("category")} class="btn btn-outline-secondary">category ⇅ </button></th>
               <th scope="col">
-              <button type="button" onClick={() => sortBy("price")} class="btn btn-outline-secondary">price ⇅ </button></th>
+              <button type="button" onClick={() => changeSort("price")} class="btn btn-outline-secondary">price ⇅ </button></th>
               <th scope="col">
                 <button type="button"  class="btn btn-outline-secondary">quantity ⇅</button></th>
               <th scope="col">
                 <button type="button"  class="btn btn-outline-secondary">total price ⇅</button></th>
             </tr>
-            {rows.map(item => {
+            {sortArr(selectCategory).map(item => {
               return (
                 <tr>
                   <td>{item.name}</td>
@@ -123,7 +154,17 @@ function App() {
             })}
           </tbody>
         </table>
-          </div>
+        </div>
+        <div  id="totalPrice">
+            מחיר סופי:{getsum()}
+            {getsum()< 20 &&
+            <div>✔</div>
+            }
+            {getsum()>20 &&
+            <div>❌</div>
+            }
+        </div>
+        </div>
         </div>
         
          
