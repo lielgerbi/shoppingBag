@@ -42,10 +42,10 @@ function App() {
   const onSubmitForm = data => {
     // console.log(forms);
     if(forms===true){
-      addProdoct({id: (productsInBag+1).toString() ,name: data.name ,category : data.category, price : data.price , quantity: data.quantity})
+      isInList({id: (productsInBag+1).toString() ,name: data.name ,category : data.category, price : data.price , quantity: data.quantity})
     }
    else{
-    addProdoct({id: (productsInBag+1).toString() ,name:data.name1 , category : data.category1, price : data.price1 , quantity: data.quantity1})
+    isInList({id: (productsInBag+1).toString() ,name:data.name1 , category : data.category1, price : data.price1 , quantity: data.quantity1})
    }
   };
    
@@ -76,7 +76,6 @@ function App() {
         debugger;
         myArr.forEach(element => {
           rows.push(element);
-          console.log(element);
         });
         setCount(rows.length);
         sortArr(null)
@@ -89,20 +88,30 @@ function App() {
     return filterItems;
   }
   function addProdoct (newItem) {
-    if(forms){
-      console.log("a")
+    debugger;
+      Axios({
+        method: "get",
+        url: "http://localhost:5000/additem",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        params: {
+          items: newItem
+        }
+      }).then(res => {
+        console.log(res)
+        });
+         setRows(rows);
+        setCount(rows.length);
     }
-    isInList(newItem);
-    rows.push(newItem);
-    setRows(rows);
-    setCount(rows.length);
-    console.log(rows);
-  }
+     
+  
 
   function isInList(newItem){
+    debugger;
     Axios({
-      method: "post",
-      url: "http://localhost:5000/A",
+      method: "get",
+      url: "http://localhost:5000/getItemIndex",
       headers: {
         "Content-Type": "application/json"
       },
@@ -110,7 +119,12 @@ function App() {
         items: newItem
       }
     }).then(res => {
-      console.log(res)
+      console.log("liel");
+      console.log(res.data.index)
+      if(res.data.index === -1){
+        addProdoct(newItem)
+        reloadRows();
+      }
       });
      
   }
@@ -123,9 +137,27 @@ function App() {
     debugger;
   }
 
+  function reloadRows()
+  {
+    Axios({
+      method: "GET",
+      url: "http://localhost:5000/",
+      headers: {
+        "Content-Type": "application/json"
+      }
+    }).then(res => {
+      console.log(res.data);
+      var myArr= res.data.rows;
+      console.log(myArr.rows);
+      debugger;
+      setRows(myArr);
+      setCount(rows.length);
+      sortArr(selectCategory);
+      window.location.reload(false);
+    });
+  }
   function sortArr(select){
     var sortRows;
-    debugger
     if(select!= null){
       var orederDir = order[(order.findIndex(element => element.name = select))].direction;
       sortRows = rows;
@@ -153,8 +185,8 @@ function App() {
     }
     else{
       sortRows = rows;
-      var reso = resp;
-      console.log(reso);
+      // var reso = resp;
+      // console.log(reso);
       debugger;
     }
     // debugger;
