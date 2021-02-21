@@ -2,7 +2,8 @@ import React ,  {useState, useEffect} from "react"
 // import { DataGrid } from '@material-ui/data-grid';
 import { useForm } from "react-hook-form";
 import 'bootstrap/dist/css/bootstrap.min.css';
-
+// const request = require('request');
+import Axios from "axios";
 function App() {
   // const columns = [
   //   { field: 'id', headerName: 'ID', width: 70 },
@@ -19,7 +20,7 @@ function App() {
   const categories = ["meat",
                       "milk",
                       "snacks"]
-
+                    
   const products = [{name: "שניצל"  , category: categories[0]},
                     {name: "חלב"    , category: categories[1]},
                     {name: "שוקולד" , category: categories[2]},
@@ -49,17 +50,38 @@ function App() {
   };
    
    const [error] = useState(null);
+   const [resp ] = useState();
    const [order] = useState([{name:"catgory" , direction: -1} ,{name:"price" , direction: -1} ,{name:"total" , direction: -1}]);
    const [selectCategory , setCategory] = useState(null);
    const [forms , setForm]= useState(true);
-   const [rows , setRows]  = useState([{ id :'1',name : 'milk' ,category : 'milk products', price :'5' , quantity: '2'},
-                                       {id:'2',name : 'coca-cola' ,category : 'drinks', price :'3' , quantity: '3'} ]);
-
-    const [productsInBag , setCount] = useState(rows.length);
+  //  const [rows , setRows]  = useState([{ id :'1',name : 'milk' ,category : 'milk products', price :'5' , quantity: '2'},
+  //                                      {id:'2',name : 'coca-cola' ,category : 'drinks', price :'3' , quantity: '3'} ]);
+  const [rows , setRows]  = useState([]);
+  const [productsInBag , setCount] = useState(rows.length);
+  
+    // const [productsInBag , setCount] = useState(rows.length);
   
     
     useEffect(() => {
-
+      Axios({
+        method: "GET",
+        url: "http://localhost:5000/",
+        headers: {
+          "Content-Type": "application/json"
+        }
+      }).then(res => {
+        console.log(res.data);
+        var myArr= res.data.rows;
+        console.log(myArr.rows);
+        debugger;
+        myArr.forEach(element => {
+          rows.push(element);
+          console.log(element);
+        });
+        setCount(rows.length);
+        sortArr(null)
+      });
+     // eslint-disable-next-line
     }, [])
 
   function getItemsByCat(category){
@@ -70,12 +92,28 @@ function App() {
     if(forms){
       console.log("a")
     }
+    isInList(newItem);
     rows.push(newItem);
     setRows(rows);
     setCount(rows.length);
     console.log(rows);
   }
 
+  function isInList(newItem){
+    Axios({
+      method: "post",
+      url: "http://localhost:5000/A",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      params: {
+        items: newItem
+      }
+    }).then(res => {
+      console.log(res)
+      });
+     
+  }
   function getsum () {
     return rows.reduce((a, b) => a + ((b.price  || 0)*(b.quantity  || 0)), 0);
   }
@@ -87,6 +125,7 @@ function App() {
 
   function sortArr(select){
     var sortRows;
+    debugger
     if(select!= null){
       var orederDir = order[(order.findIndex(element => element.name = select))].direction;
       sortRows = rows;
@@ -103,22 +142,28 @@ function App() {
       }
       //asc
       else{
-        sortRows =rows.sort((a,b) => (a[select]< b[select]) ? 1 : ((b[select] < a[select]) ? -1 : 0))
+        if(select === "total"){
+          sortRows =rows.sort((a,b) => (a.price *a.quantity< b.price *b.quantity) ? 1 : ((b.price *b.quantity < a.price *a.quantity) ? -1 : 0))
+        }
+        else{
+          sortRows =rows.sort((a,b) => (a[select]< b[select]) ? 1 : ((b[select] < a[select]) ? -1 : 0))
+        }
         return sortRows;
       }
     }
     else{
       sortRows = rows;
-      // for(const element of sortRows) {
-      //   element.totalPrice = element.price *element.quantity;
-      // }
-    }
-    debugger;
-    for(const element of sortRows) {
-      console.log(element.name);
+      var reso = resp;
+      console.log(reso);
       debugger;
-      element.totalPrice = element.price *element.quantity;
     }
+    // debugger;
+    // for(const element of sortRows) {
+    //   console.log(element.name);
+    //   debugger;
+    //   element.totalPrice = element.price *element.quantity;
+    // }
+    
     return sortRows;
   }
 
@@ -135,7 +180,7 @@ function App() {
           <div id="divInCenter">
             {/* <DataGrid rows={rows} columns={columns} pageSize={5} checkboxSelection /> */}
             <div  id="table-wrapper">
-            <table  id="process-manager-table" class="table table-sm">
+            <table id="process-manager-table" class="table table-sm">
           <tbody>
             <tr>
               <th scope="col">
@@ -167,6 +212,7 @@ function App() {
             מחיר סופי:{getsum()}
             {getsum()< 20 &&
             <div>✔</div>
+            
             }
             {getsum()>20 &&
             <div>❌</div>
@@ -175,7 +221,7 @@ function App() {
         </div>
         </div>
         
-         
+        <h1>{resp}</h1> 
       <div id="divInleft">
       <form onSubmit={handleSubmit(onSubmitForm)}>
       <label for="colFormLabel" class="col-sm-2 col-form-label">category</label>
