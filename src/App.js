@@ -135,13 +135,29 @@ function App() {
   function getsum () {
     return rows.reduce((a, b) => a + ((b.price  || 0)*(b.quantity  || 0)), 0);
   }
-  function deleteItem (newitem) {
-    setRows(rows.filter(item=>item!==newitem));
-    console.log(rows.length);
-    console.log(rows);
+  function deleteItem (newItem) {
     debugger;
-    setCount(rows.filter(item=>item!==newitem).length);
-  }
+      Axios({
+        method: "get",
+        url: "http://localhost:5000/removeitem",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        params: {
+          items: newItem
+        }
+      }).then(res => {
+        console.log(res.data.rows);
+        setCount(res.data.rows.length);
+        setRows(res.data.rows);
+        });
+    }
+    // setRows(rows.filter(item=>item!==newitem));
+    // console.log(rows.length);
+    // console.log(rows);
+    // debugger;
+    // setCount(rows.filter(item=>item!==newitem).length);
+  
   function changeSort (sortValue) {
     setCategory(sortValue);
     order[(order.findIndex(element => element.name = sortValue))].direction *=-1;
