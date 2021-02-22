@@ -2,6 +2,7 @@ import React ,  {useState, useEffect} from "react"
 // import { DataGrid } from '@material-ui/data-grid';
 import { useForm } from "react-hook-form";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import swal from 'sweetalert';
 // const request = require('request');
 import Axios from "axios";
 function App() {
@@ -124,6 +125,9 @@ function App() {
       if(res.data.index === -1){
         addProdoct(newItem)
         reloadRows();
+      }
+      else{
+        swal("product already in list" ,"", "error");
       }
       });
      
