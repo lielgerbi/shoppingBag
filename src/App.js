@@ -135,9 +135,17 @@ function App() {
   function getsum () {
     return rows.reduce((a, b) => a + ((b.price  || 0)*(b.quantity  || 0)), 0);
   }
+  function deleteItem (newitem) {
+    setRows(rows.filter(item=>item!==newitem));
+    console.log(rows.length);
+    console.log(rows);
+    debugger;
+    setCount(rows.filter(item=>item!==newitem).length);
+  }
   function changeSort (sortValue) {
     setCategory(sortValue);
     order[(order.findIndex(element => element.name = sortValue))].direction *=-1;
+    setCount(rows.length);
     debugger;
   }
 
@@ -238,6 +246,7 @@ function App() {
                   <td>{item.price}</td>
                   <td>{item.quantity}</td>
                   <td>{item.quantity *item.price}</td>
+                   <button className={`pointer`} onClick = {() => deleteItem(item)}>🗑️</button>
                 </tr>
               );
             })}
