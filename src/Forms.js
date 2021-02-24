@@ -2,7 +2,7 @@ import React ,  {useState} from "react"
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useForm } from "react-hook-form";
 import swal from 'sweetalert';
-import "./app.css"
+import "./forms.css"
 import Axios from "axios";
 function Forms({rows}) {
     
@@ -119,9 +119,9 @@ function Forms({rows}) {
               </select>
 
               <label for="colFormLabel" class="col-sm-2 col-form-label">quantity</label>
-              <input required name="quantity1" type="text" ref={register} class="form-control form-control-lg" id="colFormLabelLg" placeholder="quantity" />
+              <input required name="quantity1" type="text" ref={register} pattern="[0-9]{1,2}" title="not good" class="form-control form-control-lg" id="colFormLabelLg" placeholder="quantity" />
               <label for="colFormLabel" class="col-sm-2 col-form-label">price</label>
-              <input required name="price1" type="text" ref={register} pattern="[1-9]" title="not good" class="form-control form-control-lg" id="colFormLabelLg" placeholder="price" />
+              <input required name="price1" type="text" ref={register} pattern="[0-9]{1,3}" title="not good" class="form-control form-control-lg" id="colFormLabelLg" placeholder="price" />
               <button type="submit" onClick={() => setForm(false)} class="btn btn-primary" >add item</button>
             </form>
           </div>
@@ -130,13 +130,13 @@ function Forms({rows}) {
 
             <form onSubmit={handleSubmit(onSubmitForm)}>
               <label for="colFormLabel" class="col-sm-2 col-form-label">name</label>
-              <input required name="name" type="text" ref={register} class="form-control form-control-lg" id="colFormLabelLg" placeholder="name" />
+              <input required name="name" type="text" ref={register}  pattern="[A-Za-z0-9]{1,15}" title="not good" class="form-control form-control-lg" id="colFormLabelLg" placeholder="name" />
               <label for="colFormLabel" class="col-sm-2 col-form-label">category</label>
-              <input required name="category" type="text" ref={register} class="form-control form-control-lg" id="colFormLabelLg" placeholder="category" />
+              <input required name="category" type="text" ref={register} pattern="[A-Za-z0-9]{1,15}" title="not good" class="form-control form-control-lg" id="colFormLabelLg" placeholder="category" />
               <label for="colFormLabel" class="col-sm-2 col-form-label">quantity</label>
-              <input required name="quantity" type="text" ref={register} class="form-control form-control-lg" id="colFormLabelLg" placeholder="quantity" />
+              <input required name="quantity" type="text" ref={register} pattern="[0-9]{1,2}" title="not good" class="form-control form-control-lg" id="colFormLabelLg" placeholder="quantity" />
               <label for="colFormLabel" class="col-sm-2 col-form-label">price</label>
-              <input required name="price" type="text" ref={register} class="form-control form-control-lg" id="colFormLabelLg" placeholder="price" />
+              <input required name="price" type="text" ref={register} pattern="[0-9]{1,3}" title="not good"  class="form-control form-control-lg" id="colFormLabelLg" placeholder="price" />
               <button type="submit" onClick={() => setForm(true)} class="btn btn-primary" >add item</button>
             </form>
           </div>

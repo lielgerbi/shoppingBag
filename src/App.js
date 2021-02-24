@@ -20,7 +20,10 @@ function App() {
       var myArr = res.data.rows;
       setRows(myArr);
       setCount(myArr.length);
-    });
+    })
+    .catch(error => {
+      console.log(error)
+   })
     // eslint-disable-next-line
   }, [])
 
