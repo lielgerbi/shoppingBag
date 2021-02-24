@@ -52,7 +52,7 @@ function App() {
    
    const [error] = useState(null);
    const [resp ] = useState();
-   const [order] = useState([{name:"catgory" , direction: -1} ,{name:"price" , direction: -1} ,{name:"total" , direction: -1}]);
+   const [order ,setOrder] = useState([{name:"catgory" , direction: -1} ,{name:"price" , direction: -1} ,{name:"total" , direction: -1}]);
    const [selectCategory , setCategory] = useState(null);
    const [forms , setForm]= useState(true);
   //  const [rows , setRows]  = useState([{ id :'1',name : 'milk' ,category : 'milk products', price :'5' , quantity: '2'},
@@ -158,7 +158,10 @@ function App() {
   
   function changeSort (sortValue) {
     setCategory(sortValue);
-    order[(order.findIndex(element => element.name = sortValue))].direction *=-1;
+    var newOrder = order;
+    newOrder[(order.findIndex(element => element.name = sortValue))].direction *=-1;
+    setOrder(newOrder);
+    console.log(order);
     setCount(rows.length);
     debugger;
   }
